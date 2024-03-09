@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "hLdlbfDTfEGWKdHA6MrSnEVEWP9By4u/RST/ZIwOqPMUx4oLAOy5evTU4kDp0hG40dgGFOvCHtibGOECnuK6Og==",
+  "success": true,
+  "projectFilePath": "G:\\msvprojec\\CodingTracker\\CodingTracker.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\petar\\.nuget\\packages\\microsoft.data.sqlite\\8.0.2\\microsoft.data.sqlite.8.0.2.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\microsoft.data.sqlite.core\\8.0.2\\microsoft.data.sqlite.core.8.0.2.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.6\\sqlitepclraw.bundle_e_sqlite3.2.1.6.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.core\\2.1.6\\sqlitepclraw.core.2.1.6.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.6\\sqlitepclraw.lib.e_sqlite3.2.1.6.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.6\\sqlitepclraw.provider.e_sqlite3.2.1.6.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\system.configuration.configurationmanager\\8.0.0\\system.configuration.configurationmanager.8.0.0.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\system.diagnostics.eventlog\\8.0.0\\system.diagnostics.eventlog.8.0.0.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
