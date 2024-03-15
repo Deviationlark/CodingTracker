@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "hLdlbfDTfEGWKdHA6MrSnEVEWP9By4u/RST/ZIwOqPMUx4oLAOy5evTU4kDp0hG40dgGFOvCHtibGOECnuK6Og==",
+  "dgSpecHash": "GRh3qj1ebLAGU1eMU2+U2vRP+5wcdlUQbM+/4vnr0vFyHiHtXx532iyqcR6F/44T+FkRHWSp+0Ksw+bQ2nUfDQ==",
   "success": true,
   "projectFilePath": "G:\\msvprojec\\CodingTracker\\CodingTracker.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\petar\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\microsoft.data.sqlite\\8.0.2\\microsoft.data.sqlite.8.0.2.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\microsoft.data.sqlite.core\\8.0.2\\microsoft.data.sqlite.core.8.0.2.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.6\\sqlitepclraw.bundle_e_sqlite3.2.1.6.nupkg.sha512",

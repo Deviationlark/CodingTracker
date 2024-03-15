@@ -44,3 +44,5 @@ G:\msvprojec\CodingTracker\obj\Debug\net8.0\CodingTracker.pdb
 G:\msvprojec\CodingTracker\obj\Debug\net8.0\CodingTracker.genruntimeconfig.cache
 G:\msvprojec\CodingTracker\obj\Debug\net8.0\ref\CodingTracker.dll
 G:\msvprojec\CodingTracker\bin\Debug\net8.0\CodingTracker.dll.config
+G:\msvprojec\CodingTracker\obj\Debug\net8.0\CodingTracker.sourcelink.json
+G:\msvprojec\CodingTracker\bin\Debug\net8.0\ConsoleTableExt.dll
