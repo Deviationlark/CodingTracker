@@ -1,4 +1,5 @@
 using System.Configuration;
+using Dapper;
 using Microsoft.Data.Sqlite;
 
 namespace CodingTracker
@@ -8,34 +9,30 @@ namespace CodingTracker
         static string? connectionString = ConfigurationManager.AppSettings.Get("connectionString");
         internal void Get()
         {
+            GetUserInput userInput = new();
             TableVisualisation tableVisualisation = new();
             List<CodingSession> tableData = new();
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
-                var tableCmd = connection.CreateCommand();
+                string tableCmd;
 
-                tableCmd.CommandText = $"SELECT * FROM coding_hours";
+                tableCmd = $"SELECT * FROM coding_hours";
 
-                SqliteDataReader reader = tableCmd.ExecuteReader();
+                tableData = connection.Query<CodingSession>(tableCmd).ToList();
 
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        tableData.Add(new CodingSession{
-                            Id = reader.GetInt32(0),
-                            Date = reader.GetString(1),
-                            Duration = reader.GetString(2)
-                        });
-                    }
-                }
-                else
-                    Console.WriteLine("No rows found.");
-
-                tableVisualisation.ShowTable(tableData);
+                connection.Close();
             }
+            Console.Clear();
+
+            if (tableData.Count == 0)
+            {
+                Console.WriteLine("No records found. Press enter to go back to main menu.");
+                Console.ReadLine();
+            }
+            if (tableData.Count > 0)
+            tableVisualisation.ShowTable(tableData);
         }
 
         internal void Post(CodingSession coding)
@@ -54,7 +51,7 @@ namespace CodingTracker
             }
         }
 
-        internal void Delete()
+        internal int Delete(int id)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -62,23 +59,41 @@ namespace CodingTracker
 
                 var tableCmd = connection.CreateCommand();
 
-                tableCmd.CommandText = $"";
+                tableCmd.CommandText = $"DELETE FROM coding_hours WHERE Id = '{id}'";
 
-                tableCmd.ExecuteNonQuery();
+                int rowCount = tableCmd.ExecuteNonQuery();
 
                 connection.Close();
+
+                return rowCount;
             }
         }
 
-        internal void Update()
+        internal void Update(int id)
         {
+            GetUserInput userInput = new();
+
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
                 var tableCmd = connection.CreateCommand();
 
-                tableCmd.CommandText = $"";
+                tableCmd.CommandText = $"SELECT EXISTS(SELECT 1 FROM coding_hours WHERE Id = '{id}')";
+
+                int rowCount = Convert.ToInt32(tableCmd.ExecuteScalar());
+
+                if (rowCount == 0)
+                {
+                    Console.WriteLine($"Record with id {id} doesn't exist.");
+                    Console.ReadLine();
+                    userInput.ProcessUpdate();
+                }
+
+                string date = userInput.GetDateInput();
+                string[] info = userInput.CalculateDuration();
+
+                tableCmd.CommandText = $"UPDATE coding_hours SET date = '{date}', duration = '{info[2]}' WHERE Id = {id}";
 
                 tableCmd.ExecuteNonQuery();
 

@@ -59,16 +59,30 @@ namespace CodingTracker
 
         internal void ProcessDelete()
         {
-            // codingController.Get();
-            int idNum = GetNumInput("Type the ID of the session you want to delete. Type 0 to go back to Main Menu");
+            codingController.Get();
+            int id = GetNumInput("Type the ID of the session you want to delete. Type 0 to go back to Main Menu");
+            
+            var coding = codingController.Delete(id);
 
+            while (coding == 0)
+            {
+                Console.WriteLine($"Record with id {id} doesn't exist");
+                Console.ReadLine();
+
+                codingController.Get();
+                id = GetNumInput("Type the ID of the session you want to delete. Type 0 to go back to Main Menu");
+
+                coding = codingController.Delete(id);
+            }
         }
 
         internal void ProcessUpdate()
-        {
-            int idNum = GetNumInput("Type the ID of the session you want to update. Type 0 to go back to Main Menu");
-            string date = GetDateInput();
+        {   
+            codingController.Get();
+            int id = GetNumInput("Type the ID of the session you want to update. Type 0 to go back to Main Menu");
 
+            codingController.Update(id);
+        
 
         }
 

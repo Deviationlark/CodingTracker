@@ -42,9 +42,21 @@
               "target": "Package",
               "version": "[3.2.0, )"
             },
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.35, )"
+            },
             "Microsoft.Data.Sqlite": {
               "target": "Package",
               "version": "[8.0.2, )"
+            },
+            "Spectre.Console": {
+              "target": "Package",
+              "version": "[0.48.0, )"
+            },
+            "Spectre.Console.Cli": {
+              "target": "Package",
+              "version": "[0.48.0, )"
             },
             "System.Configuration.ConfigurationManager": {
               "target": "Package",

@@ -46,3 +46,9 @@ G:\msvprojec\CodingTracker\obj\Debug\net8.0\ref\CodingTracker.dll
 G:\msvprojec\CodingTracker\bin\Debug\net8.0\CodingTracker.dll.config
 G:\msvprojec\CodingTracker\obj\Debug\net8.0\CodingTracker.sourcelink.json
 G:\msvprojec\CodingTracker\bin\Debug\net8.0\ConsoleTableExt.dll
+G:\msvprojec\CodingTracker\bin\Debug\net8.0\Spectre.Console.dll
+G:\msvprojec\CodingTracker\bin\Debug\net8.0\Spectre.Console.Cli.dll
+G:\msvprojec\CodingTracker\bin\Debug\net8.0\de\Spectre.Console.Cli.resources.dll
+G:\msvprojec\CodingTracker\bin\Debug\net8.0\fr\Spectre.Console.Cli.resources.dll
+G:\msvprojec\CodingTracker\bin\Debug\net8.0\sv\Spectre.Console.Cli.resources.dll
+G:\msvprojec\CodingTracker\bin\Debug\net8.0\Dapper.dll

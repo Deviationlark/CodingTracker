@@ -1,19 +1,22 @@
 {
   "version": 2,
-  "dgSpecHash": "GRh3qj1ebLAGU1eMU2+U2vRP+5wcdlUQbM+/4vnr0vFyHiHtXx532iyqcR6F/44T+FkRHWSp+0Ksw+bQ2nUfDQ==",
+  "dgSpecHash": "BUtlvav8L0t2lF6x0aHmtpQN0yIRDJCU6WaRVCh85vHd6wv9momsdkpMlmOIvxxewGCmIvdH2snNlkN7J6C/1w==",
   "success": true,
   "projectFilePath": "G:\\msvprojec\\CodingTracker\\CodingTracker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\petar\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\microsoft.data.sqlite\\8.0.2\\microsoft.data.sqlite.8.0.2.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\microsoft.data.sqlite.core\\8.0.2\\microsoft.data.sqlite.core.8.0.2.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\spectre.console\\0.48.0\\spectre.console.0.48.0.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\spectre.console.cli\\0.48.0\\spectre.console.cli.0.48.0.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.6\\sqlitepclraw.bundle_e_sqlite3.2.1.6.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.core\\2.1.6\\sqlitepclraw.core.2.1.6.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.6\\sqlitepclraw.lib.e_sqlite3.2.1.6.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.6\\sqlitepclraw.provider.e_sqlite3.2.1.6.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\system.configuration.configurationmanager\\8.0.0\\system.configuration.configurationmanager.8.0.0.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\system.diagnostics.eventlog\\8.0.0\\system.diagnostics.eventlog.8.0.0.nupkg.sha512",
-    "C:\\Users\\petar\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\petar\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
     "C:\\Users\\petar\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
   ],
   "logs": []
