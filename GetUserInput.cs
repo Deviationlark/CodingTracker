@@ -24,6 +24,7 @@ namespace CodingTracker
                     case "0":
                         Console.WriteLine("Goodbye!");
                         closeApp = true;
+                        Environment.Exit(0);
                         break;
                     case "1":
                         codingController.Get();
@@ -37,7 +38,6 @@ namespace CodingTracker
                     case "4":
                         ProcessDelete();
                         break;
-
                     default:
                         Console.WriteLine("Invalid Command. Please type a number from 0 to 4.");
                         break;
@@ -82,8 +82,6 @@ namespace CodingTracker
             int id = GetNumInput("Type the ID of the session you want to update. Type 0 to go back to Main Menu");
 
             codingController.Update(id);
-        
-
         }
 
         internal int GetNumInput(string message)
