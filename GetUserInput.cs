@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 namespace CodingTracker
 {
@@ -27,7 +28,7 @@ namespace CodingTracker
                         Environment.Exit(0);
                         break;
                     case "1":
-                        codingController.Get();
+                        ProcessView();
                         break;
                     case "2":
                         ProcessAdd();
@@ -43,6 +44,50 @@ namespace CodingTracker
                         break;
                 }
             }
+        }
+
+        internal void ProcessView()
+        {
+            Console.WriteLine("1.View Records");
+            Console.WriteLine("2. Filter Records");
+            var userInput = Console.ReadLine();
+
+            if (userInput == "1")
+                codingController.Get();
+
+            else if (userInput == "2")
+                ProcessFilter();
+
+            else
+            {
+                Console.WriteLine("That's not one of the options.");
+                Console.ReadLine();
+                ProcessView();
+            }
+
+        }
+
+        internal void ProcessFilter()
+        {
+            Console.WriteLine("Type the starting date you want to filter by(dd-mm-yy): ");
+            string? userInput = Console.ReadLine();
+            while (!DateTime.TryParseExact(userInput, "dd-MM-yy", new CultureInfo("en-US"), DateTimeStyles.None, out _))
+            {
+                Console.WriteLine("Wrong Format. Enter the date with the correct format(dd-mm-yy):");
+                userInput = Console.ReadLine();
+            }
+            string startTime = userInput;
+
+            Console.WriteLine("Type the ending date you want to filter by(dd-mm-yy): ");
+            userInput = Console.ReadLine();
+            while (!DateTime.TryParseExact(userInput, "dd-MM-yy", new CultureInfo("en-US"), DateTimeStyles.None, out _))
+            {
+                Console.WriteLine("Wrong Format. Enter the date with the correct format(dd-mm-yy):");
+                userInput = Console.ReadLine();
+            }
+            string endTime = userInput;
+
+            codingController.Filter(startTime, endTime);
         }
 
         internal void ProcessAdd()
@@ -61,7 +106,7 @@ namespace CodingTracker
         {
             codingController.Get();
             int id = GetNumInput("Type the ID of the session you want to delete. Type 0 to go back to Main Menu");
-            
+
             var coding = codingController.Delete(id);
 
             while (coding == 0)
@@ -77,7 +122,7 @@ namespace CodingTracker
         }
 
         internal void ProcessUpdate()
-        {   
+        {
             codingController.Get();
             int id = GetNumInput("Type the ID of the session you want to update. Type 0 to go back to Main Menu");
 

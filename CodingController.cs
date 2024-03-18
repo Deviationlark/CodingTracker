@@ -1,4 +1,5 @@
 using System.Configuration;
+using ConsoleTableExt;
 using Dapper;
 using Microsoft.Data.Sqlite;
 
@@ -32,7 +33,7 @@ namespace CodingTracker
                 Console.ReadLine();
             }
             if (tableData.Count > 0)
-            tableVisualisation.ShowTable(tableData);
+                tableVisualisation.ShowTable(tableData);
         }
 
         internal void Post(CodingSession coding)
@@ -99,6 +100,30 @@ namespace CodingTracker
 
                 connection.Close();
             }
+        }
+
+        internal void Filter(string startDate, string endDate)
+        {
+            // remove - from 18-03-24 from all dates and filter by that number
+            TableVisualisation tableVisualisation = new();
+            List<CodingSession> tableData = new();
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string tableCmd = $"SELECT * FROM coding_hours WHERE date BETWEEN {startDate} AND {endDate} ORDER BY date";
+
+                tableData = connection.Query<CodingSession>(tableCmd).ToList();
+
+                connection.Close();
+            }
+            if (tableData.Count == 0)
+            {
+                Console.WriteLine("No records found. Press enter to go back to main menu.");
+                Console.ReadLine();
+            }
+            if (tableData.Count > 0)
+                tableVisualisation.ShowTable(tableData);
         }
     }
 }
