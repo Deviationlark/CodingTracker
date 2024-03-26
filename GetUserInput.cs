@@ -48,9 +48,30 @@ namespace CodingTracker
 
         internal void ProcessView()
         {
-            Console.WriteLine("1.View Records");
+            // add average duration and total duration
+            Console.WriteLine("1. View Records");
             Console.WriteLine("2. Filter Records");
+            Console.WriteLine("3. View total and average duration");
             var userInput = Console.ReadLine();
+
+            switch (userInput)
+            {
+                case "1":
+                    codingController.Get();
+                    break;
+                case "2":
+                    ProcessFilter();
+                    break;
+                case "3":
+                    // ViewReport();
+                    break;
+                default:
+                    Console.WriteLine("That's not one of the options.");
+                    Console.ReadLine();
+                    ProcessView();
+                    break;
+
+            }
 
             if (userInput == "1")
                 codingController.Get();
@@ -87,7 +108,25 @@ namespace CodingTracker
             }
             string endTime = userInput;
 
-            codingController.Filter(startTime, endTime);
+            string[] startTimeArray = startTime.Split('-');
+            Array.Reverse(startTimeArray);
+            string startingTime = "";
+
+            foreach (var element in startTimeArray)
+            {
+                startingTime += element;
+            }
+
+            string[] endTimeArray = endTime.Split('-');
+            Array.Reverse(endTimeArray);
+            string endingTime = "";
+
+            foreach (var element in endTimeArray)
+            {
+                endingTime += element;
+            }
+
+            codingController.Filter(Convert.ToInt32(startingTime), Convert.ToInt32(endingTime));
         }
 
         internal void ProcessAdd()

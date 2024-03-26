@@ -19,7 +19,7 @@ namespace CodingTracker
 
                 string tableCmd;
 
-                tableCmd = $"SELECT * FROM coding_hours";
+                tableCmd = $"SELECT * FROM coding_hours ORDER BY date";
 
                 tableData = connection.Query<CodingSession>(tableCmd).ToList();
 
@@ -102,18 +102,70 @@ namespace CodingTracker
             }
         }
 
-        internal void Filter(string startDate, string endDate)
+        internal void Filter(int startDate, int endDate)
         {
-            // remove - from 18-03-24 from all dates and filter by that number
+            GetUserInput getUserInput = new();
             TableVisualisation tableVisualisation = new();
             List<CodingSession> tableData = new();
+            List<CodingSession> filterData = new();
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
-                string tableCmd = $"SELECT * FROM coding_hours WHERE date BETWEEN {startDate} AND {endDate} ORDER BY date";
+                string tableCmd = $"SELECT * FROM coding_hours";
 
                 tableData = connection.Query<CodingSession>(tableCmd).ToList();
+
+                connection.Close();
+            }
+            int[] dateRecords = new int[tableData.Count];
+            int count = 0;
+            foreach (var record in tableData)
+            {
+                string? date = record.Date.ToString();
+                string[] dates = date.Split('-');
+                Array.Reverse(dates);
+                string time = "";
+                foreach (var element in dates)
+                {
+                    time += element;
+                }
+                dateRecords[count] = Convert.ToInt32(time);
+                count++;
+            }
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                var tableCmd = connection.CreateCommand();
+
+                tableCmd.CommandText = "SELECT EXISTS(SELECT date FROM coding_hours)";
+
+                int rowCount = Convert.ToInt32(tableCmd.ExecuteScalar());
+
+                if (rowCount == 0)
+                {
+                    Console.WriteLine("No dates found. Press Enter to go back to main menu");
+                    Console.ReadLine();
+                    getUserInput.MainMenu();
+                }
+                count = 0;
+                foreach (var element in tableData)
+                {
+                    tableCmd.CommandText = $"UPDATE coding_hours SET date = '{dateRecords[count]}' WHERE Id = '{element.Id}'";
+                    tableCmd.ExecuteNonQuery();
+                    count++;
+                }
+                connection.Close();
+            }
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string tableCmd = $"SELECT * FROM coding_hours WHERE date BETWEEN '{startDate}' AND '{endDate}' ORDER BY date";
+
+                filterData = connection.Query<CodingSession>(tableCmd).ToList();
 
                 connection.Close();
             }
@@ -123,7 +175,28 @@ namespace CodingTracker
                 Console.ReadLine();
             }
             if (tableData.Count > 0)
-                tableVisualisation.ShowTable(tableData);
+                tableVisualisation.ShowFilterTable(filterData);
+        }
+
+        internal void ViewReport()
+        {
+            // convert duration records to integers and add them up then show them
+            List<CodingSession> tableData = new();
+            using(var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string tableCmd = $"SELECT * FROM coding_hours";
+
+                tableData = connection.Query<CodingSession>(tableCmd).ToList();
+
+                connection.Close();
+            }
+            int duration;
+            foreach(var element in tableData)
+            {
+                duration = Convert.ToInt32(element.Duration);
+            }
         }
     }
 }

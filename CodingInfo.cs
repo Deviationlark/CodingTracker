@@ -6,4 +6,11 @@ namespace CodingTracker
         internal string? Date { get; set; }
         internal string? Duration { get; set; }
     }
+
+    internal class Filter
+    {
+        internal int Id { get; set; }
+        internal int Date { get; set; }
+        internal string? Duration { get; set; }
+    }
 }
