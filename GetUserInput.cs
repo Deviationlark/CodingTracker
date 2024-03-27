@@ -17,6 +17,7 @@ namespace CodingTracker
                 Console.WriteLine("2. Insert a record");
                 Console.WriteLine("3. Update a record");
                 Console.WriteLine("4. Delete a record");
+                Console.WriteLine("5. Stopwatch");
 
                 string? userInput = Console.ReadLine();
 
@@ -38,6 +39,9 @@ namespace CodingTracker
                         break;
                     case "4":
                         ProcessDelete();
+                        break;
+                    case "5":
+                        StopWatch();
                         break;
                     default:
                         Console.WriteLine("Invalid Command. Please type a number from 0 to 4.");
@@ -63,7 +67,7 @@ namespace CodingTracker
                     ProcessFilter();
                     break;
                 case "3":
-                    // ViewReport();
+                    ViewReport();
                     break;
                 default:
                     Console.WriteLine("That's not one of the options.");
@@ -72,20 +76,6 @@ namespace CodingTracker
                     break;
 
             }
-
-            if (userInput == "1")
-                codingController.Get();
-
-            else if (userInput == "2")
-                ProcessFilter();
-
-            else
-            {
-                Console.WriteLine("That's not one of the options.");
-                Console.ReadLine();
-                ProcessView();
-            }
-
         }
 
         internal void ProcessFilter()
@@ -129,14 +119,20 @@ namespace CodingTracker
             codingController.Filter(Convert.ToInt32(startingTime), Convert.ToInt32(endingTime));
         }
 
-        internal void ProcessAdd()
+        internal void ProcessAdd(string duration = "")
         {
+            string[] info = new string[2];
             var date = GetDateInput();
-            string[] info = CalculateDuration();
+            if (duration == "")
+            {
+                info = CalculateDuration();
+                duration = info[2];
+            }
+
             CodingSession coding = new();
 
             coding.Date = date;
-            coding.Duration = info[2];
+            coding.Duration = duration;
 
             codingController.Post(coding);
         }
@@ -160,12 +156,70 @@ namespace CodingTracker
             }
         }
 
+        internal void ViewReport()
+        {
+            string[] info = codingController.Report();
+
+            Console.WriteLine($"Total duration of sessions in database: {info[0]}");
+            Console.WriteLine($"Average duration: {info[1]}");
+            Console.WriteLine("Press enter to go back to main menu.");
+            Console.ReadLine();
+        }
+
         internal void ProcessUpdate()
         {
             codingController.Get();
             int id = GetNumInput("Type the ID of the session you want to update. Type 0 to go back to Main Menu");
 
             codingController.Update(id);
+        }
+
+        internal void StopWatch()
+        {
+            Console.WriteLine("Starting Stopwatch. Do your work and stop the stopwatch when you're done.");
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            while (!Console.KeyAvailable)
+            {
+                // Clear the console and display the elapsed time
+                Console.Clear();
+                Console.WriteLine("Elapsed Time: " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss"));
+                Console.WriteLine("Press any key to stop the stopwatch.");
+
+                // Sleep for a short interval to avoid consuming too much CPU
+                Thread.Sleep(100); // Update every 100 milliseconds
+            }
+
+            stopwatch.Stop();
+            string duration = stopwatch.Elapsed.ToString(@"hh\:mm\:ss");
+            string? userInput = "";
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Elapsed Time: " + duration);
+                Console.WriteLine("0. Main Menu");
+                Console.WriteLine("1. Enter duration in database");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "0":
+                        MainMenu();
+                        break;
+                    case "1":
+                        ProcessAdd(duration);
+                        break;
+                    default:
+                        Console.WriteLine("Thats not an option. ");
+                        Console.ReadLine();
+                        break;
+
+
+                }
+            } while (userInput != "0" || userInput != "1");
+
+
         }
 
         internal int GetNumInput(string message)

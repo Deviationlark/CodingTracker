@@ -178,10 +178,11 @@ namespace CodingTracker
                 tableVisualisation.ShowFilterTable(filterData);
         }
 
-        internal void ViewReport()
+        internal string[] Report()
         {
             // convert duration records to integers and add them up then show them
             List<CodingSession> tableData = new();
+            string[] info = new string[2];
             using(var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
@@ -192,11 +193,23 @@ namespace CodingTracker
 
                 connection.Close();
             }
-            int duration;
+            TimeSpan duration;
+            TimeSpan totalDuration = new TimeSpan(0, 0, 0);
             foreach(var element in tableData)
             {
-                duration = Convert.ToInt32(element.Duration);
+                duration = TimeSpan.Parse(element.Duration);
+                totalDuration += duration;
             }
+
+            TimeSpan averageDuration;
+
+            averageDuration = TimeSpan.FromSeconds(totalDuration.TotalSeconds / tableData.Count);
+
+            info[0] = totalDuration.ToString();
+            info[1] = averageDuration.ToString();
+
+            return info;
+            
         }
     }
 }

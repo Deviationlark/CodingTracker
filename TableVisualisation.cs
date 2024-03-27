@@ -6,9 +6,11 @@ namespace CodingTracker
     {
         internal void ShowTable(List<CodingSession> tableData)
         {
+            
             foreach (var element in tableData)
             {
                 string date = element.Date;
+                if(DateTime.TryParseExact(date,"dd-MM-yy",null,  System.Globalization.DateTimeStyles.None, out _)) continue;
                 string substring1 = date.Substring(0, 2);
                 string substring2 = date.Substring(2, 2);
                 string substring3 = date.Substring(4, 2);
@@ -41,6 +43,7 @@ namespace CodingTracker
             foreach (var element in tableData)
             {
                 string date = element.Date;
+                if(DateTime.TryParseExact(date,"dd-MM-yy",null,  System.Globalization.DateTimeStyles.None, out _)) continue;
                 string substring1 = date.Substring(0, 2);
                 string substring2 = date.Substring(2, 2);
                 string substring3 = date.Substring(4, 2);
