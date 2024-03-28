@@ -7,7 +7,7 @@ namespace CodingTracker
     {
         internal void CreateTable(string? connectionString)
         {
-            using(var connection = new SqliteConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
@@ -17,6 +17,22 @@ namespace CodingTracker
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Date TEXT,
                     Duration TEXT
+                )";
+
+                tableCmd.ExecuteNonQuery();
+
+                connection.Close();
+            }
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                var tableCmd = connection.CreateCommand();
+
+                tableCmd.CommandText = @"CREATE TABLE IF NOT EXISTS coding_goals(
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Hours TEXT
                 )";
 
                 tableCmd.ExecuteNonQuery();

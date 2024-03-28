@@ -226,18 +226,21 @@ namespace CodingTracker
 
         internal void SetGoal()
         {
-            TimeSpan goal;
+            int hours;
+            Goals goals = new();
 
             Console.WriteLine("Type the amount of hours you want to set a goal for: ");
             string? userInput = Console.ReadLine();
 
-            while (!TimeSpan.TryParse(userInput, out goal ))
+            while (!int.TryParse(userInput, out hours))
             {
                 Console.WriteLine("Wrong format. Try again: ");
                 userInput = Console.ReadLine();
             }
+            TimeSpan goal = new TimeSpan(hours, 0, 0);
+            goals.Hours = goal.TotalHours.ToString();
 
-            Console.WriteLine(goal);
+            codingController.InsertGoal(goals);
         }
 
         internal int GetNumInput(string message)

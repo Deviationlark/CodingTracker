@@ -183,7 +183,7 @@ namespace CodingTracker
             // convert duration records to integers and add them up then show them
             List<CodingSession> tableData = new();
             string[] info = new string[2];
-            using(var connection = new SqliteConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
@@ -195,7 +195,7 @@ namespace CodingTracker
             }
             TimeSpan duration;
             TimeSpan totalDuration = new TimeSpan(0, 0, 0);
-            foreach(var element in tableData)
+            foreach (var element in tableData)
             {
                 duration = TimeSpan.Parse(element.Duration);
                 totalDuration += duration;
@@ -209,7 +209,23 @@ namespace CodingTracker
             info[1] = averageDuration.ToString();
 
             return info;
-            
+
+        }
+
+        internal void InsertGoal(Goals goals)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                var tableCmd = connection.CreateCommand();
+
+                tableCmd.CommandText = $"INSERT INTO coding_hours (hours) VALUES ('{goals.Hours}')";
+
+                tableCmd.ExecuteNonQuery();
+
+                connection.Close();
+            }
         }
     }
 }
