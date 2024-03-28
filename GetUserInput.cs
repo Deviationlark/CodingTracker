@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using Spectre.Console;
 namespace CodingTracker
 {
     internal class GetUserInput
@@ -13,11 +14,12 @@ namespace CodingTracker
                 Console.WriteLine("MAIN MENU");
                 Console.WriteLine("----------");
                 Console.WriteLine("0. Exit");
-                Console.WriteLine("1. View all records");
+                Console.WriteLine("1. View records");
                 Console.WriteLine("2. Insert a record");
                 Console.WriteLine("3. Update a record");
                 Console.WriteLine("4. Delete a record");
                 Console.WriteLine("5. Stopwatch");
+                Console.WriteLine("6. Set a goal");
 
                 string? userInput = Console.ReadLine();
 
@@ -43,6 +45,9 @@ namespace CodingTracker
                     case "5":
                         StopWatch();
                         break;
+                    case "6":
+                        SetGoal();
+                        break;
                     default:
                         Console.WriteLine("Invalid Command. Please type a number from 0 to 4.");
                         break;
@@ -52,8 +57,7 @@ namespace CodingTracker
 
         internal void ProcessView()
         {
-            // add average duration and total duration
-            Console.WriteLine("1. View Records");
+            Console.WriteLine("1. View All Records");
             Console.WriteLine("2. Filter Records");
             Console.WriteLine("3. View total and average duration");
             var userInput = Console.ReadLine();
@@ -218,8 +222,22 @@ namespace CodingTracker
 
                 }
             } while (userInput != "0" || userInput != "1");
+        }
 
+        internal void SetGoal()
+        {
+            TimeSpan goal;
 
+            Console.WriteLine("Type the amount of hours you want to set a goal for: ");
+            string? userInput = Console.ReadLine();
+
+            while (!TimeSpan.TryParse(userInput, out goal ))
+            {
+                Console.WriteLine("Wrong format. Try again: ");
+                userInput = Console.ReadLine();
+            }
+
+            Console.WriteLine(goal);
         }
 
         internal int GetNumInput(string message)
