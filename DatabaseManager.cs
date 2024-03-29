@@ -32,7 +32,11 @@ namespace CodingTracker
 
                 tableCmd.CommandText = @"CREATE TABLE IF NOT EXISTS coding_goals(
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Hours TEXT
+                    Hours TEXT,
+                    Date TEXT,
+                    RemainingDays TEXT,
+                    RemainingHours TEXT,
+                    HoursPerDay TEXT
                 )";
 
                 tableCmd.ExecuteNonQuery();

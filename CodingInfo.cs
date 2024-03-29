@@ -18,5 +18,10 @@ namespace CodingTracker
     {
         internal int Id { get; set; }
         internal string? Hours { get; set; }
+
+        internal string? Date { get; set; }
+        internal string? RemainingDays { get; set; }
+        internal string? RemainingHours { get; set; }
+        internal string? HoursPerDay { get; set; }
     }
 }

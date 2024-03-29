@@ -91,7 +91,7 @@ namespace CodingTracker
                     userInput.ProcessUpdate();
                 }
 
-                string date = userInput.GetDateInput();
+                string date = userInput.GetDateInput("Type the date you want to update to: ");
                 string[] info = userInput.CalculateDuration();
 
                 tableCmd.CommandText = $"UPDATE coding_hours SET date = '{date}', duration = '{info[2]}' WHERE Id = {id}";
@@ -194,7 +194,7 @@ namespace CodingTracker
                 connection.Close();
             }
             TimeSpan duration;
-            TimeSpan totalDuration = new TimeSpan(0, 0, 0);
+            TimeSpan totalDuration = new();
             foreach (var element in tableData)
             {
                 duration = TimeSpan.Parse(element.Duration);
@@ -205,11 +205,45 @@ namespace CodingTracker
 
             averageDuration = TimeSpan.FromSeconds(totalDuration.TotalSeconds / tableData.Count);
 
-            info[0] = totalDuration.ToString();
-            info[1] = averageDuration.ToString();
+            info[0] = string.Format("{0:%h} hours {0:%m} minutes {0:%s} seconds", totalDuration);
+            info[1] = string.Format("{0:%h} hours {0:%m} minutes {0:%s} seconds", averageDuration);
 
             return info;
 
+        }
+
+        internal void ViewGoals()
+        {
+            GetUserInput getUserInput = new();
+            TableVisualisation tableVisualisation = new();
+            List<Goals> tableData = new();
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string tableCmd;
+
+                tableCmd = $"SELECT * FROM coding_goals";
+
+                tableData = connection.Query<Goals>(tableCmd).ToList();
+
+                connection.Close();
+            }
+            if (tableData.Count == 0)
+            {
+                Console.WriteLine("No goals found. Press enter to go back to main menu.");
+                Console.ReadLine();
+            }
+
+            foreach (var goal in tableData)
+            {
+                string[] info = getUserInput.GetDueGoalInfo(Convert.ToInt32(goal.Hours), goal.Date);
+                goal.RemainingDays = info[0];
+                goal.RemainingHours = info[1];
+                goal.HoursPerDay = info[2];
+            }
+
+            tableVisualisation.ShowGoalsTable(tableData);
         }
 
         internal void InsertGoal(Goals goals)
@@ -220,11 +254,32 @@ namespace CodingTracker
 
                 var tableCmd = connection.CreateCommand();
 
-                tableCmd.CommandText = $"INSERT INTO coding_hours (hours) VALUES ('{goals.Hours}')";
+                tableCmd.CommandText = @$"INSERT INTO 
+                coding_goals (hours, date, remainingdays, remaininghours, hoursperday) 
+                VALUES ('{goals.Hours}', '{goals.Date}', '{goals.RemainingDays}', {goals.RemainingHours}, 
+                {goals.HoursPerDay})";
 
                 tableCmd.ExecuteNonQuery();
 
                 connection.Close();
+            }
+        }
+
+        internal int DeleteGoal(int id)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                var tableCmd = connection.CreateCommand();
+
+                tableCmd.CommandText = $"DELETE FROM coding_goals WHERE Id = '{id}'";
+
+                int rowCount = tableCmd.ExecuteNonQuery();
+
+                connection.Close();
+
+                return rowCount;
             }
         }
     }

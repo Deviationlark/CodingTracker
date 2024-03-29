@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using Microsoft.VisualBasic;
 using Spectre.Console;
 namespace CodingTracker
 {
@@ -14,12 +15,8 @@ namespace CodingTracker
                 Console.WriteLine("MAIN MENU");
                 Console.WriteLine("----------");
                 Console.WriteLine("0. Exit");
-                Console.WriteLine("1. View records");
-                Console.WriteLine("2. Insert a record");
-                Console.WriteLine("3. Update a record");
-                Console.WriteLine("4. Delete a record");
-                Console.WriteLine("5. Stopwatch");
-                Console.WriteLine("6. Set a goal");
+                Console.WriteLine("1. View Coding Menu");
+                Console.WriteLine("2. View Goals Menu");
 
                 string? userInput = Console.ReadLine();
 
@@ -31,27 +28,87 @@ namespace CodingTracker
                         Environment.Exit(0);
                         break;
                     case "1":
-                        ProcessView();
+                        CodingMenu();
                         break;
                     case "2":
-                        ProcessAdd();
-                        break;
-                    case "3":
-                        ProcessUpdate();
-                        break;
-                    case "4":
-                        ProcessDelete();
-                        break;
-                    case "5":
-                        StopWatch();
-                        break;
-                    case "6":
-                        SetGoal();
-                        break;
-                    default:
-                        Console.WriteLine("Invalid Command. Please type a number from 0 to 4.");
+                        GoalsMenu();
                         break;
                 }
+            }
+        }
+
+        internal void CodingMenu()
+        {
+            Console.WriteLine("CODING");
+            Console.WriteLine("----------");
+            Console.WriteLine("0. Main Menu");
+            Console.WriteLine("1. View records");
+            Console.WriteLine("2. Insert a record");
+            Console.WriteLine("3. Update a record");
+            Console.WriteLine("4. Delete a record");
+            Console.WriteLine("5. Stopwatch");
+
+            string? userInput = Console.ReadLine();
+
+            switch (userInput)
+            {
+                case "0":
+                    MainMenu();
+                    break;
+                case "1":
+                    ProcessView();
+                    break;
+                case "2":
+                    ProcessAdd();
+                    break;
+                case "3":
+                    ProcessUpdate();
+                    break;
+                case "4":
+                    ProcessDelete();
+                    break;
+                case "5":
+                    StopWatch();
+                    break;
+                default:
+                    Console.WriteLine("Invalid Command. Please type a number from 0 to 4.");
+                    CodingMenu();
+                    break;
+            }
+        }
+        internal void GoalsMenu()
+        {
+            Console.WriteLine("GOALS");
+            Console.WriteLine("----------");
+            Console.WriteLine("0. Main Menu");
+            Console.WriteLine("1. View records");
+            Console.WriteLine("2. Insert a record");
+            Console.WriteLine("3. Update a record");
+            Console.WriteLine("4. Delete a record");
+
+            string? userInput = Console.ReadLine();
+
+            switch (userInput)
+            {
+                case "0":
+                    MainMenu();
+                    break;
+                case "1":
+                    codingController.ViewGoals();
+                    break;
+                case "2":
+                    SetGoals();
+                    break;
+                case "3":
+                    // UpdateGoals();
+                    break;
+                case "4":
+                    RemoveGoal();
+                    break;
+                default:
+                    Console.WriteLine("Invalid Command. Please type a number from 0 to 4.");
+                    GoalsMenu();
+                    break;
             }
         }
 
@@ -126,7 +183,7 @@ namespace CodingTracker
         internal void ProcessAdd(string duration = "")
         {
             string[] info = new string[2];
-            var date = GetDateInput();
+            var date = GetDateInput("Type the date you want to record: ");
             if (duration == "")
             {
                 info = CalculateDuration();
@@ -224,11 +281,13 @@ namespace CodingTracker
             } while (userInput != "0" || userInput != "1");
         }
 
-        internal void SetGoal()
+        internal void SetGoals()
         {
+            // fix hoursperday exception
+            DateTime dueDate = DateTime.Parse(GetDateInput("Type the date you want to finish this goal by: "));
             int hours;
             Goals goals = new();
-
+            
             Console.WriteLine("Type the amount of hours you want to set a goal for: ");
             string? userInput = Console.ReadLine();
 
@@ -238,9 +297,43 @@ namespace CodingTracker
                 userInput = Console.ReadLine();
             }
             TimeSpan goal = new TimeSpan(hours, 0, 0);
+            
             goals.Hours = goal.TotalHours.ToString();
+            goals.Date = dueDate.ToString("dd-MM-yy");
+
+            string[] info = GetDueGoalInfo(hours, goals.Date);
+            double calculatedHoursPerDay = Convert.ToDouble(info[3]);
+
+            goals.RemainingDays = info[0];
+            goals.RemainingHours = info[1];
+            if (calculatedHoursPerDay > 1)
+                goals.HoursPerDay = info[2].ToString();
+            else if (calculatedHoursPerDay < 1 && calculatedHoursPerDay > 0)
+                goals.HoursPerDay = info[2].ToString() + " minutes";
 
             codingController.InsertGoal(goals);
+        }
+
+        internal void RemoveGoal()
+        {
+            codingController.ViewGoals();
+            int id = GetNumInput("Type the ID of the session you want to delete. Type 0 to go back to Main Menu");
+
+            var coding = codingController.DeleteGoal(id);
+
+            while (coding == 0)
+            {
+                Console.WriteLine($"Record with id {id} doesn't exist");
+                Console.ReadLine();
+
+                codingController.ViewGoals();
+                id = GetNumInput("Type the ID of the session you want to delete. Type 0 to go back to Main Menu");
+
+                coding = codingController.DeleteGoal(id);
+            }
+
+            Console.WriteLine("Goal Deleted. Press enter to go back to main menu.");
+            Console.ReadLine();
         }
 
         internal int GetNumInput(string message)
@@ -260,9 +353,9 @@ namespace CodingTracker
             return userNum;
         }
 
-        internal string GetDateInput()
+        internal string GetDateInput(string message)
         {
-            Console.WriteLine("Enter the date you want to record(dd-mm-yy): ");
+            Console.WriteLine(message);
             Console.WriteLine("Type 0 to go back to Main Menu");
             string? userInput = Console.ReadLine();
             if (userInput == "0") MainMenu();
@@ -305,6 +398,36 @@ namespace CodingTracker
             codingInfo[1] = endTime.ToString();
             codingInfo[2] = duration.ToString();
             return codingInfo;
+        }
+
+        internal string[] GetDueGoalInfo(int hours = 0, string date = "")
+        {
+            DateTime dueDate = DateTime.Parse(date);
+            string[] codingInfo = codingController.Report();
+            double totalHours = Convert.ToDouble(codingInfo[0].Substring(0, 2));
+            DateTime currentDate = DateTime.Now;
+            string[] info = new string[4];
+
+            TimeSpan calculatedDays = dueDate - currentDate;
+            double calculatedHours = hours - totalHours;
+            double calculatedHoursPerDay = calculatedHours / Convert.ToDouble(calculatedDays.TotalDays);
+
+            string remainingDays = calculatedDays.ToString("%d");
+            int remainingHours = Convert.ToInt32(calculatedHours);
+            int hoursPerDay;
+            if (calculatedHoursPerDay > 1) hoursPerDay = (int)calculatedHoursPerDay;
+
+            else if (calculatedHoursPerDay < 1 && calculatedHoursPerDay > 0) hoursPerDay = Convert.ToInt32(calculatedHoursPerDay * 60);
+
+            else hoursPerDay = 0;
+
+            info[0] = remainingDays;
+            info[1] = remainingHours.ToString();
+            info[2] = hoursPerDay.ToString();
+            info[3] = calculatedHoursPerDay.ToString();
+
+            return info;
+
         }
     }
 }

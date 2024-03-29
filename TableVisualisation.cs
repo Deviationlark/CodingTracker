@@ -6,11 +6,11 @@ namespace CodingTracker
     {
         internal void ShowTable(List<CodingSession> tableData)
         {
-            
+
             foreach (var element in tableData)
             {
                 string date = element.Date;
-                if(DateTime.TryParseExact(date,"dd-MM-yy",null,  System.Globalization.DateTimeStyles.None, out _)) continue;
+                if (DateTime.TryParseExact(date, "dd-MM-yy", null, System.Globalization.DateTimeStyles.None, out _)) continue;
                 string substring1 = date.Substring(0, 2);
                 string substring2 = date.Substring(2, 2);
                 string substring3 = date.Substring(4, 2);
@@ -43,7 +43,7 @@ namespace CodingTracker
             foreach (var element in tableData)
             {
                 string date = element.Date;
-                if(DateTime.TryParseExact(date,"dd-MM-yy",null,  System.Globalization.DateTimeStyles.None, out _)) continue;
+                if (DateTime.TryParseExact(date, "dd-MM-yy", null, System.Globalization.DateTimeStyles.None, out _)) continue;
                 string substring1 = date.Substring(0, 2);
                 string substring2 = date.Substring(2, 2);
                 string substring3 = date.Substring(4, 2);
@@ -66,6 +66,29 @@ namespace CodingTracker
             foreach (var session in tableData)
             {
                 table.AddRow($"[tan]{session.Id}[/]", $"[tan]{session.Date}[/]", $"[tan]{session.Duration}[/]");
+            }
+
+            AnsiConsole.Write(table);
+        }
+
+        internal void ShowGoalsTable(List<Goals> tableData)
+        {
+            Console.WriteLine("\n\n");
+            var table = new Table();
+
+            table.Title("[green]Coding Goals[/]");
+
+            table.AddColumn("[blue]Id[/]");
+            table.AddColumn("[blue]Hours[/]");
+            table.AddColumn("[blue]Due Date[/]");
+            table.AddColumn("[blue]Remaining Days[/]");
+            table.AddColumn("[blue]Remaining Hours[/]");
+            table.AddColumn("[blue]Hours Per Day[/]");
+
+            foreach (var goal in tableData)
+            {
+                table.AddRow($"[tan]{goal.Id}[/]", $"[tan]{goal.Hours}[/]", $"[tan]{goal.Date}[/]", 
+                $"[tan]{goal.RemainingDays}[/]", $"[tan]{goal.RemainingHours}[/]", $"[tan]{goal.HoursPerDay}[/]");
             }
 
             AnsiConsole.Write(table);
