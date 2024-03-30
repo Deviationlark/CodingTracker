@@ -83,12 +83,26 @@ namespace CodingTracker
             table.AddColumn("[blue]Due Date[/]");
             table.AddColumn("[blue]Remaining Days[/]");
             table.AddColumn("[blue]Remaining Hours[/]");
-            table.AddColumn("[blue]Hours Per Day[/]");
+            table.AddColumn("[blue]Hours/Minutes Per Day[/]");
 
             foreach (var goal in tableData)
             {
-                table.AddRow($"[tan]{goal.Id}[/]", $"[tan]{goal.Hours}[/]", $"[tan]{goal.Date}[/]", 
-                $"[tan]{goal.RemainingDays}[/]", $"[tan]{goal.RemainingHours}[/]", $"[tan]{goal.HoursPerDay}[/]");
+                if (goal.RemainingDays != "Completed")
+                {
+                    if (Convert.ToDouble(goal.HoursPerDay) < 1 && Convert.ToDouble(goal.HoursPerDay) > 0)
+                    {
+                        goal.HoursPerDay = Convert.ToInt32(Convert.ToDouble(goal.HoursPerDay) * 60.0).ToString();
+                        table.AddRow($"[tan]{goal.Id}[/]", $"[tan]{goal.Hours}[/]", $"[tan]{goal.Date}[/]",
+                        $"[tan]{goal.RemainingDays}[/]", $"[tan]{goal.RemainingHours}[/]", $"[tan]{goal.HoursPerDay} minutes[/]");
+                    }
+                }
+
+                else
+                {
+                    if (goal.RemainingDays != "Completed") goal.HoursPerDay = Convert.ToInt32(Convert.ToDouble(goal.HoursPerDay)).ToString();
+                    table.AddRow($"[tan]{goal.Id}[/]", $"[tan]{goal.Hours}[/]", $"[tan]{goal.Date}[/]",
+                    $"[tan]{goal.RemainingDays}[/]", $"[tan]{goal.RemainingHours}[/]", $"[tan]{goal.HoursPerDay}[/]");
+                }
             }
 
             AnsiConsole.Write(table);

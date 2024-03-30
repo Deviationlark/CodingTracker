@@ -2,6 +2,7 @@ using System.Configuration;
 using ConsoleTableExt;
 using Dapper;
 using Microsoft.Data.Sqlite;
+using SQLitePCL;
 
 namespace CodingTracker
 {
@@ -10,7 +11,6 @@ namespace CodingTracker
         static string? connectionString = ConfigurationManager.AppSettings.Get("connectionString");
         internal void Get()
         {
-            GetUserInput userInput = new();
             TableVisualisation tableVisualisation = new();
             List<CodingSession> tableData = new();
             using (var connection = new SqliteConnection(connectionString))
@@ -180,7 +180,6 @@ namespace CodingTracker
 
         internal string[] Report()
         {
-            // convert duration records to integers and add them up then show them
             List<CodingSession> tableData = new();
             string[] info = new string[2];
             using (var connection = new SqliteConnection(connectionString))
@@ -195,14 +194,15 @@ namespace CodingTracker
             }
             TimeSpan duration;
             TimeSpan totalDuration = new();
+            
             foreach (var element in tableData)
             {
+                if (tableData.Count < 1) element.Duration = "00:00:00";
                 duration = TimeSpan.Parse(element.Duration);
                 totalDuration += duration;
             }
-
-            TimeSpan averageDuration;
-
+            TimeSpan averageDuration = new TimeSpan(0, 0, 0);
+            if (tableData.Count > 1)
             averageDuration = TimeSpan.FromSeconds(totalDuration.TotalSeconds / tableData.Count);
 
             info[0] = string.Format("{0:%h} hours {0:%m} minutes {0:%s} seconds", totalDuration);
@@ -242,7 +242,7 @@ namespace CodingTracker
                 goal.RemainingHours = info[1];
                 goal.HoursPerDay = info[2];
             }
-
+            if (tableData.Count > 0)
             tableVisualisation.ShowGoalsTable(tableData);
         }
 
@@ -256,8 +256,8 @@ namespace CodingTracker
 
                 tableCmd.CommandText = @$"INSERT INTO 
                 coding_goals (hours, date, remainingdays, remaininghours, hoursperday) 
-                VALUES ('{goals.Hours}', '{goals.Date}', '{goals.RemainingDays}', {goals.RemainingHours}, 
-                {goals.HoursPerDay})";
+                VALUES ('{goals.Hours}', '{goals.Date}', '{goals.RemainingDays}', '{goals.RemainingHours}', 
+                '{goals.HoursPerDay}')";
 
                 tableCmd.ExecuteNonQuery();
 
